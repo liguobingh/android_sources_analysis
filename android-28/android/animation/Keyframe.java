@@ -23,7 +23,11 @@ package android.animation;
  * target object will animate between the value at the previous keyframe and the value at the
  * next keyframe. Each keyframe also holds an optional {@link TimeInterpolator}
  * object, which defines the time interpolation over the intervalue preceding the keyframe.
- *
+
+ * 此类包含动画的时间/值对。{@link ValueAnimator}调用Keyframe类来定义动画目标在动画过程中将具有的值。
+ * 随着时间从一个关键帧前进到另一个关键帧，目标对象的值将在前一个关键帧的值和下一个关键帧的值之间进行动画处理。
+ * 每个关键帧还包含一个可选的{@link TimeInterpolator}对象，该对象定义关键帧之前的间隔内的时间插值。
+
  * <p>The Keyframe class itself is abstract. The type-specific factory methods will return
  * a subclass of Keyframe specific to the type of value being stored. This is done to improve
  * performance when dealing with the most common cases (e.g., <code>float</code> and
@@ -32,6 +36,13 @@ package android.animation;
  * or a data structure that needs to be animated directly (and evaluated using an implementation
  * of {@link TypeEvaluator}), you should stick to using float and int as animations using those
  * types have lower runtime overhead than other types.</p>
+  
+ * Keyframe类本身是抽象的。特定于类型的工厂方法将返回Keyframe的子类，该子类特定于要存储的值的类型。
+ * 这样做是为了在处理最常见的情况时提高性能（例如，<code> float </ code>和<code> int </ code>值）。
+ * 其他类型将属于更通用的Keyframe类，将其值视为对象。除非您的动画需要处理需要直接设置动画的自定义类型或
+ * 数据结构（并使用{@link TypeEvaluator}的实现进行评估），否则您应该坚持使用float和int作为动画使用这些类
+ * 型具有较低的运行时开销比其他类型。
+
  */
 public abstract class Keyframe implements Cloneable {
     /**
