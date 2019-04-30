@@ -19,6 +19,9 @@
 // To change this file, either edit the include, or device/tools/gluemaker/main.cpp, 
 // or one of the auxilary file specifications in device/tools/gluemaker.
 
+// 此文件是由 C++ include文件：SkXfermode.h生成过来的，对该文件所做的任何更改都将被构建程序丢弃。
+// 要更改此文件，请编辑include文件，或者编辑device/tools/gluemaker/main.cpp文件，或者编辑device/tools/gluemaker中的辅助文件规范之一。
+
 package android.graphics;
 
 /**
@@ -27,6 +30,11 @@ package android.graphics;
  * can be called to return an instance of any of the predefined subclasses as
  * specified in the Modes enum. When an Xfermode is assigned to an Paint, then
  * objects drawn with that paint have the xfermode applied.
+
+ * Xfermode是Object的基类，Object类被调用来实现在绘图管道中的自定义“传输模式”。
+ * Xfermode是被调用以在绘图管道中实现自定义“传输模式”的对象的基类。
+ * The static function Create(Modes) can be called to return an instance of any of the predefined subclasses as specified in the Modes enum. 
+ * When an Xfermode is assigned to an Paint, then objects drawn with that paint have the xfermode applied.
  */
 public class Xfermode {
     static final int DEFAULT = PorterDuff.Mode.SRC_OVER.nativeInt;
