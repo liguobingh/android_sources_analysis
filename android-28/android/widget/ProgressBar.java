@@ -855,6 +855,11 @@ public class ProgressBar extends View {
      * Should only be called if we've already verified that mProgressDrawable
      * and mProgressTintInfo are non-null.
      */
+
+    /**
+     * Should only be called if we've already verified that mProgressDrawable
+     * and mProgressTintInfo are non-null.
+     */
     private void applyProgressBackgroundTint() {
         if (mProgressTintInfo.mHasProgressBackgroundTint
                 || mProgressTintInfo.mHasProgressBackgroundTintMode) {
@@ -1003,6 +1008,27 @@ public class ProgressBar extends View {
      * @see #getProgressBackgroundTintList()
      * @see Drawable#setTintList(ColorStateList)
      */
+
+    /**
+     * Applies a tint to the progress background, if one exists. Does not
+     * modify the current tint mode, which is
+     * {@link PorterDuff.Mode#SRC_ATOP} by default.
+     * <p>
+     * The progress background must be specified as a layer with
+     * id {@link android.R.id#background} in a {@link LayerDrawable}
+     * used as the progress drawable.
+     * <p>
+     * Subsequent calls to {@link #setProgressDrawable(Drawable)} where the
+     * drawable contains a progress background will automatically mutate the
+     * drawable and apply the specified tint and tint mode using
+     * {@link Drawable#setTintList(ColorStateList)}.
+     *
+     * @param tint the tint to apply, may be {@code null} to clear tint
+     *
+     * @attr ref android.R.styleable#ProgressBar_progressBackgroundTint
+     * @see #getProgressBackgroundTintList()
+     * @see Drawable#setTintList(ColorStateList)
+     */
     @RemotableViewMethod
     public void setProgressBackgroundTintList(@Nullable ColorStateList tint) {
         if (mProgressTintInfo == null) {
@@ -1015,6 +1041,14 @@ public class ProgressBar extends View {
             applyProgressBackgroundTint();
         }
     }
+
+    /**
+     * Returns the tint applied to the progress background, if specified.
+     *
+     * @return the tint applied to the progress background
+     * @attr ref android.R.styleable#ProgressBar_progressBackgroundTint
+     * @see #setProgressBackgroundTintList(ColorStateList)
+     */
 
     /**
      * Returns the tint applied to the progress background, if specified.
@@ -1039,6 +1073,18 @@ public class ProgressBar extends View {
      * @see #setProgressBackgroundTintList(ColorStateList)
      * @see Drawable#setTintMode(PorterDuff.Mode)
      */
+
+    /**
+     * Specifies the blending mode used to apply the tint specified by
+     * {@link #setProgressBackgroundTintList(ColorStateList)}} to the progress
+     * background. The default mode is {@link PorterDuff.Mode#SRC_IN}.
+     *
+     * @param tintMode the blending mode used to apply the tint, may be
+     *                 {@code null} to clear tint
+     * @attr ref android.R.styleable#ProgressBar_progressBackgroundTintMode
+     * @see #setProgressBackgroundTintList(ColorStateList)
+     * @see Drawable#setTintMode(PorterDuff.Mode)
+     */
     public void setProgressBackgroundTintMode(@Nullable PorterDuff.Mode tintMode) {
         if (mProgressTintInfo == null) {
             mProgressTintInfo = new ProgressTintInfo();
@@ -1050,6 +1096,13 @@ public class ProgressBar extends View {
             applyProgressBackgroundTint();
         }
     }
+
+    /**
+     * @return the blending mode used to apply the tint to the progress
+     *         background
+     * @attr ref android.R.styleable#ProgressBar_progressBackgroundTintMode
+     * @see #setProgressBackgroundTintMode(PorterDuff.Mode)
+     */
 
     /**
      * @return the blending mode used to apply the tint to the progress
@@ -1543,6 +1596,16 @@ public class ProgressBar extends View {
             mMin = min;
         }
     }
+
+    /**
+     * <p>Set the upper range of the progress bar <tt>max</tt>.</p>
+     *
+     * @param max the upper range of this progress bar
+     *
+     * @see #getMax()
+     * @see #setProgress(int)
+     * @see #setSecondaryProgress(int)
+     */
 
     /**
      * <p>Set the upper range of the progress bar <tt>max</tt>.</p>

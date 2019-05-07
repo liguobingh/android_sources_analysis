@@ -59,6 +59,8 @@ public class TextViewBindingAdapter {
     public static final int SIGNED = 0x03;
     public static final int DECIMAL = 0x05;
 
+
+	// 布局界面中控件的text属性设置
     @BindingAdapter("android:text")
     public static void setText(TextView view, CharSequence text) {
         final CharSequence oldText = view.getText();

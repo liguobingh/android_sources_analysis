@@ -9136,6 +9136,19 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * @see #getContentDescription()
      * @attr ref android.R.styleable#View_contentDescription
      */
+
+	/**
+     * 设置{@link View}的内容说明。
+     * <p>
+     * 内容描述简要描述了视图，主要用于可访问性支持，以确定应如何向用户呈现视图。
+	 * 对于没有文本表示的视图，例如{@link android.widget.ImageButton}，有用的内容描述解释了视图的作用。 
+	 * 例如，具有用于发出呼叫的电话图标的图像按钮可以使用“呼叫”作为其内容描述。 
+	 * 用于保存文件的软盘映像可以使用“保存”。
+     *
+     * @param contentDescription The content description.
+     * @see #getContentDescription()
+     * @attr ref android.R.styleable#View_contentDescription
+     */
     @RemotableViewMethod
     public void setContentDescription(CharSequence contentDescription) {
         if (mContentDescription == null) {
@@ -23416,6 +23429,18 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     public int getMinimumHeight() {
         return mMinHeight;
     }
+
+    /**
+     * Sets the minimum height of the view. It is not guaranteed the view will
+     * be able to achieve this minimum height (for example, if its parent layout
+     * constrains it with less available height).
+     *
+     * @param minHeight The minimum height the view will try to be, in pixels
+     *
+     * @see #getMinimumHeight()
+     *
+     * @attr ref android.R.styleable#View_minHeight
+     */
 
     /**
      * Sets the minimum height of the view. It is not guaranteed the view will
