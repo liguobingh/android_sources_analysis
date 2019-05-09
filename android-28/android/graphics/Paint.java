@@ -1113,6 +1113,16 @@ public class Paint {
      * @param shader May be null. the new shader to be installed in the paint
      * @return       shader
      */
+
+    /**
+     * Set or clear the shader object.
+     * <p />
+     * Pass null to clear any previous shader.
+     * As a convenience, the parameter passed is also returned.
+     *
+     * @param shader May be null. the new shader to be installed in the paint
+     * @return       shader
+     */
     public Shader setShader(Shader shader) {
         // If mShader changes, cached value of native shader aren't valid, since
         // old shader's pointer may be reused by another shader allocation later
@@ -1161,6 +1171,20 @@ public class Paint {
     public Xfermode getXfermode() {
         return mXfermode;
     }
+
+    /**
+     * Set or clear the transfer mode object. A transfer mode defines how
+     * source pixels (generate by a drawing command) are composited with
+     * the destination pixels (content of the render target).
+     * <p />
+     * Pass null to clear any previous transfer mode.
+     * As a convenience, the parameter passed is also returned.
+     * <p />
+     * {@link PorterDuffXfermode} is the most common transfer mode.
+     *
+     * @param xfermode May be null. The xfermode to be installed in the paint
+     * @return         xfermode
+     */
 
     /**
      * Set or clear the transfer mode object. A transfer mode defines how
@@ -1230,6 +1254,15 @@ public class Paint {
      *
      * @param maskfilter May be null. The maskfilter to be installed in the
      *                   paint
+     * @return           maskfilter
+     */
+
+    /**
+     * 设置或清除maskfilter对象。
+     * <p />
+     * 传递null以清除任何以前的掩码过滤器。为了方便起见，还返回传递的参数。
+     *
+     * @param maskfilter 可能为null。要在paint中使用的maskfilter
      * @return           maskfilter
      */
     public MaskFilter setMaskFilter(MaskFilter maskfilter) {

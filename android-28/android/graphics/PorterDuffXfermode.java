@@ -28,6 +28,12 @@ public class PorterDuffXfermode extends Xfermode {
      *
      * @param mode           The porter-duff mode that is applied
      */
+
+    /**
+     * Create an xfermode that uses the specified porter-duff mode.
+     *
+     * @param mode           The porter-duff mode that is applied
+     */
     public PorterDuffXfermode(PorterDuff.Mode mode) {
         porterDuffMode = mode.nativeInt;
     }

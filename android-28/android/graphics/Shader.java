@@ -80,6 +80,12 @@ public class Shader {
      * @param localM Set to the local matrix of the shader, if the shader's matrix is non-null.
      * @return true if the shader has a non-identity local matrix
      */
+
+    /**
+     * Return true if the shader has a non-identity local matrix.
+     * @param localM Set to the local matrix of the shader, if the shader's matrix is non-null.
+     * @return true if the shader has a non-identity local matrix
+     */
     public boolean getLocalMatrix(@NonNull Matrix localM) {
         if (mLocalMatrix != null) {
             localM.set(mLocalMatrix);
@@ -87,6 +93,14 @@ public class Shader {
         }
         return false;
     }
+
+    /**
+     * Set the shader's local matrix. Passing null will reset the shader's
+     * matrix to identity. If the matrix has scale value as 0, the drawing
+     * result is undefined.
+     *
+     * @param localM The shader's new local matrix, or null to specify identity
+     */
 
     /**
      * Set the shader's local matrix. Passing null will reset the shader's

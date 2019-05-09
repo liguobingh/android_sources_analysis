@@ -40,6 +40,14 @@ public class BitmapShader extends Shader {
      * @param tileX The tiling mode for x to draw the bitmap in.
      * @param tileY The tiling mode for y to draw the bitmap in.
      */
+
+    /**
+     * Call this to create a new shader that will draw with a bitmap.
+     *
+     * @param bitmap The bitmap to use inside the shader
+     * @param tileX The tiling mode for x to draw the bitmap in.
+     * @param tileY The tiling mode for y to draw the bitmap in.
+     */
     public BitmapShader(@NonNull Bitmap bitmap, @NonNull TileMode tileX, @NonNull TileMode tileY) {
         this(bitmap, tileX.nativeInt, tileY.nativeInt);
     }

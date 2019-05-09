@@ -51,6 +51,22 @@ public class AvoidXfermode extends Xfermode {
      * Tolerance near 0: draw only on colors that are nearly identical to the op-color
      * Tolerance near 255: draw on any colors even remotely similar to the op-color
      */
+
+    /** This xfermode draws, or doesn't draw, based on the destination's
+     * distance from an op-color.
+     *
+     * There are two modes, and each mode interprets a tolerance value.
+     *
+     * Avoid: In this mode, drawing is allowed only on destination pixels that
+     * are different from the op-color.
+     * Tolerance near 0: avoid any colors even remotely similar to the op-color
+     * Tolerance near 255: avoid only colors nearly identical to the op-color
+     
+     * Target: In this mode, drawing only occurs on destination pixels that
+     * are similar to the op-color
+     * Tolerance near 0: draw only on colors that are nearly identical to the op-color
+     * Tolerance near 255: draw on any colors even remotely similar to the op-color
+     */
     public AvoidXfermode(int opColor, int tolerance, Mode mode) {
         if (tolerance < 0 || tolerance > 255) {
             throw new IllegalArgumentException("tolerance must be 0..255");
