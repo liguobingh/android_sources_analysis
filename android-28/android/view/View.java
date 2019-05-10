@@ -14368,6 +14368,13 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * (but after its own view has been drawn).
      * @param canvas the canvas on which to draw the view
      */
+
+    /**
+     * Called by draw to draw the child views. This may be overridden
+     * by derived classes to gain control just before its children are drawn
+     * (but after its own view has been drawn).
+     * @param canvas the canvas on which to draw the view
+     */
     protected void dispatchDraw(Canvas canvas) {
 
     }
@@ -17791,6 +17798,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         scrollBar.setBounds(l, t, r, b);
         scrollBar.draw(canvas);
     }
+
+    /**
+     * Implement this to do your drawing.
+     *
+     * @param canvas the canvas on which the background will be drawn
+     */
 
     /**
      * Implement this to do your drawing.

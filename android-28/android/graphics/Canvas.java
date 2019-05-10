@@ -390,6 +390,17 @@ public class Canvas extends BaseCanvas {
      *
      * @return The value to pass to restoreToCount() to balance this save()
      */
+
+    /**
+     * Saves the current matrix and clip onto a private stack.
+     * <p>
+     * Subsequent calls to translate,scale,rotate,skew,concat or clipRect,
+     * clipPath will all operate as usual, but when the balancing call to
+     * restore() is made, those calls will be forgotten, and the settings that
+     * existed before the save() will be reinstated.
+     *
+     * @return The value to pass to restoreToCount() to balance this save()
+     */
     public int save() {
         return nSave(mNativeCanvasWrapper, MATRIX_SAVE_FLAG | CLIP_SAVE_FLAG);
     }
@@ -412,9 +423,61 @@ public class Canvas extends BaseCanvas {
      *                  to save/restore
      * @return The value to pass to restoreToCount() to balance this save()
      */
+
+    /**
+     * Based on saveFlags, can save the current matrix and clip onto a private
+     * stack.
+     * <p class="note"><strong>Note:</strong> if possible, use the
+     * parameter-less save(). It is simpler and faster than individually
+     * disabling the saving of matrix or clip with this method.
+     * <p>
+     * Subsequent calls to translate,scale,rotate,skew,concat or clipRect,
+     * clipPath will all operate as usual, but when the balancing call to
+     * restore() is made, those calls will be forgotten, and the settings that
+     * existed before the save() will be reinstated.
+     *
+     * @removed
+     * @deprecated Use {@link #save()} instead.
+     * @param saveFlags flag bits that specify which parts of the Canvas state
+     *                  to save/restore
+     * @return The value to pass to restoreToCount() to balance this save()
+     */
     public int save(@Saveflags int saveFlags) {
         return nSave(mNativeCanvasWrapper, saveFlags);
     }
+
+    /**
+     * This behaves the same as save(), but in addition it allocates and
+     * redirects drawing to an offscreen bitmap.
+     * <p class="note"><strong>Note:</strong> this method is very expensive,
+     * incurring more than double rendering cost for contained content. Avoid
+     * using this method, especially if the bounds provided are large. It is
+     * recommended to use a {@link android.view.View#LAYER_TYPE_HARDWARE hardware layer} on a View
+     * to apply an xfermode, color filter, or alpha, as it will perform much
+     * better than this method.
+     * <p>
+     * All drawing calls are directed to a newly allocated offscreen bitmap.
+     * Only when the balancing call to restore() is made, is that offscreen
+     * buffer drawn back to the current target of the Canvas (either the
+     * screen, it's target Bitmap, or the previous layer).
+     * <p>
+     * Attributes of the Paint - {@link Paint#getAlpha() alpha},
+     * {@link Paint#getXfermode() Xfermode}, and
+     * {@link Paint#getColorFilter() ColorFilter} are applied when the
+     * offscreen bitmap is drawn back when restore() is called.
+     *
+     * As of API Level API level {@value Build.VERSION_CODES#P} the only valid
+     * {@code saveFlags} is {@link #ALL_SAVE_FLAG}.  All other flags are ignored.
+     *
+     * @deprecated Use {@link #saveLayer(RectF, Paint)} instead.
+     * @param bounds May be null. The maximum size the offscreen bitmap
+     *               needs to be (in local coordinates)
+     * @param paint  This is copied, and is applied to the offscreen when
+     *               restore() is called.
+     * @param saveFlags see _SAVE_FLAG constants, generally {@link #ALL_SAVE_FLAG} is recommended
+     *               for performance reasons.
+     * @return       value to pass to restoreToCount() to balance this save()
+     */
 
     /**
      * This behaves the same as save(), but in addition it allocates and
@@ -502,6 +565,15 @@ public class Canvas extends BaseCanvas {
      *
      * @deprecated Use {@link #saveLayer(float, float, float, float, Paint)} instead.
      */
+
+    /**
+     * Helper version of saveLayer() that takes 4 values rather than a RectF.
+     *
+     * As of API Level API level {@value Build.VERSION_CODES#P} the only valid
+     * {@code saveFlags} is {@link #ALL_SAVE_FLAG}.  All other flags are ignored.
+     *
+     * @deprecated Use {@link #saveLayer(float, float, float, float, Paint)} instead.
+     */
     public int saveLayer(float left, float top, float right, float bottom, @Nullable Paint paint,
             @Saveflags int saveFlags) {
         checkValidSaveFlags(saveFlags);
@@ -514,9 +586,45 @@ public class Canvas extends BaseCanvas {
      * Convenience for {@link #saveLayer(RectF, Paint)} that takes the four float coordinates of the
      * bounds rectangle.
      */
+
+    /**
+     * Convenience for {@link #saveLayer(RectF, Paint)} that takes the four float coordinates of the
+     * bounds rectangle.
+     */
     public int saveLayer(float left, float top, float right, float bottom, @Nullable Paint paint) {
         return saveLayer(left, top, right, bottom, paint, ALL_SAVE_FLAG);
     }
+
+    /**
+     * This behaves the same as save(), but in addition it allocates and
+     * redirects drawing to an offscreen bitmap.
+     * <p class="note"><strong>Note:</strong> this method is very expensive,
+     * incurring more than double rendering cost for contained content. Avoid
+     * using this method, especially if the bounds provided are large. It is
+     * recommended to use a {@link android.view.View#LAYER_TYPE_HARDWARE hardware layer} on a View
+     * to apply an xfermode, color filter, or alpha, as it will perform much
+     * better than this method.
+     * <p>
+     * All drawing calls are directed to a newly allocated offscreen bitmap.
+     * Only when the balancing call to restore() is made, is that offscreen
+     * buffer drawn back to the current target of the Canvas (either the
+     * screen, it's target Bitmap, or the previous layer).
+     * <p>
+     * The {@code alpha} parameter is applied when the offscreen bitmap is
+     * drawn back when restore() is called.
+     *
+     * As of API Level API level {@value Build.VERSION_CODES#P} the only valid
+     * {@code saveFlags} is {@link #ALL_SAVE_FLAG}.  All other flags are ignored.
+     *
+     * @deprecated Use {@link #saveLayerAlpha(RectF, int)} instead.
+     * @param bounds    The maximum size the offscreen bitmap needs to be
+     *                  (in local coordinates)
+     * @param alpha     The alpha to apply to the offscreen when it is
+                        drawn during restore()
+     * @param saveFlags see _SAVE_FLAG constants, generally {@link #ALL_SAVE_FLAG} is recommended
+     *                  for performance reasons.
+     * @return          value to pass to restoreToCount() to balance this call
+     */
 
     /**
      * This behaves the same as save(), but in addition it allocates and
@@ -578,6 +686,15 @@ public class Canvas extends BaseCanvas {
      *
      * @deprecated Use {@link #saveLayerAlpha(float, float, float, float, int)} instead.
      */
+
+    /**
+     * Helper for saveLayerAlpha() that takes 4 values instead of a RectF.
+     *
+     * As of API Level API level {@value Build.VERSION_CODES#P} the only valid
+     * {@code saveFlags} is {@link #ALL_SAVE_FLAG}.  All other flags are ignored.
+     *
+     * @deprecated Use {@link #saveLayerAlpha(float, float, float, float, int)} instead.
+     */
     public int saveLayerAlpha(float left, float top, float right, float bottom, int alpha,
             @Saveflags int saveFlags) {
         checkValidSaveFlags(saveFlags);
@@ -585,6 +702,11 @@ public class Canvas extends BaseCanvas {
         return nSaveLayerAlpha(mNativeCanvasWrapper, left, top, right, bottom,
                                      alpha, ALL_SAVE_FLAG);
     }
+
+    /**
+     * Convenience for {@link #saveLayerAlpha(RectF, int)} that takes the four float coordinates of
+     * the bounds rectangle.
+     */
 
     /**
      * Convenience for {@link #saveLayerAlpha(RectF, int)} that takes the four float coordinates of
