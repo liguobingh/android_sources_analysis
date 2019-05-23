@@ -3138,6 +3138,16 @@ public class Activity extends ContextThemeWrapper
      * @return Return true if you have consumed the event, false if you haven't.
      * The default implementation always returns false.
      */
+
+	/**
+     * 当触摸屏事件未被其下的任何视图处理时调用。
+	 * 这对于处理窗口边界外发生的触摸事件非常有用，因为没有视图可以接收它。
+     *
+     * @param event 正在处理的触摸屏事件。
+     *
+     * @return 如果您已经消耗了该事件，则返回true，否则返回false。
+     * 默认实现始终返回false。
+     */
     public boolean onTouchEvent(MotionEvent event) {
         if (mWindow.shouldCloseOnTouch(this, event)) {
             finish();

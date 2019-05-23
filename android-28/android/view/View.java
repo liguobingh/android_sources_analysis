@@ -13728,6 +13728,21 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * @param event The motion event.
      * @return True if the event was handled, false otherwise.
      */
+
+    /**
+     * 实现此方法以处理触摸屏动作事件。
+     * <p>
+     * 如果使用此方法检测单击操作，建议通过实现和调用 {@link #perClickClick()} 来执行操作。
+	 * 这将确保一致的系统行为，包括：
+     * <ul>
+     * <li>遵守点击声音偏好
+     * <li>调度OnClickListener调用
+     * <li>启用辅助功能时处理 {@link AccessibilityNodeInfo#ACTION_CLICK ACTION_CLICK} 
+     * </ul>
+     *
+     * @param event 动作事件。
+     * @return 如果事件被处理则为True，否则为false。
+     */
     public boolean onTouchEvent(MotionEvent event) {
         final float x = event.getX();
         final float y = event.getY();
