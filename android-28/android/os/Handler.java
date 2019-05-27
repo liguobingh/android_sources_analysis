@@ -599,6 +599,14 @@ public class Handler {
      *         message queue.  Returns false on failure, usually because the
      *         looper processing the message queue is exiting.
      */
+
+    /**
+	 * 在当前时间之前、所有待处理消息之后，将消息推送到消息队列的末尾。 
+	 * 它将会被附着于handler的线程中的{@link #handleMessage}接收。
+     *  
+     * @return 如果成功地将消息放入消息队列，则返回true。
+	 *         失败时返回false，通常是因为处理消息队列的looper正在退出。
+     */
     public final boolean sendMessage(Message msg)
     {
         return sendMessageDelayed(msg, 0);
@@ -659,6 +667,14 @@ public class Handler {
      *         the looper is quit before the delivery time of the message
      *         occurs then the message will be dropped.
      */
+
+    /**
+     * 在（当前时间+ delayMillis）之前，在所有待处理消息之后将消息排入消息队列。 
+	 * 你将会在附着于此handler的线程中的handleMessage()方法中接收到它。
+     *  
+     * @return 如果消息已成功放入消息队列，则返回true。失败时返回false，通常是因为处理消息队列的looper正在退出。 
+	 *         请注意，结果为true并不意味着消息会被处理--如果looper在发生消息的传递时间之前退出，则消息将被丢弃。
+     */
     public final boolean sendMessageDelayed(Message msg, long delayMillis)
     {
         if (delayMillis < 0) {
@@ -666,6 +682,26 @@ public class Handler {
         }
         return sendMessageAtTime(msg, SystemClock.uptimeMillis() + delayMillis);
     }
+
+    /**
+     * Enqueue a message into the message queue after all pending messages
+     * before the absolute time (in milliseconds) <var>uptimeMillis</var>.
+     * <b>The time-base is {@link android.os.SystemClock#uptimeMillis}.</b>
+     * Time spent in deep sleep will add an additional delay to execution.
+     * You will receive it in {@link #handleMessage}, in the thread attached
+     * to this handler.
+     * 
+     * @param uptimeMillis The absolute time at which the message should be
+     *         delivered, using the
+     *         {@link android.os.SystemClock#uptimeMillis} time-base.
+     *         
+     * @return Returns true if the message was successfully placed in to the 
+     *         message queue.  Returns false on failure, usually because the
+     *         looper processing the message queue is exiting.  Note that a
+     *         result of true does not mean the message will be processed -- if
+     *         the looper is quit before the delivery time of the message
+     *         occurs then the message will be dropped.
+     */
 
     /**
      * Enqueue a message into the message queue after all pending messages
