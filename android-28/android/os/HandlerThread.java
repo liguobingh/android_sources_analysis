@@ -23,6 +23,11 @@ import android.annotation.Nullable;
  * Handy class for starting a new thread that has a looper. The looper can then be 
  * used to create handler classes. Note that start() must still be called.
  */
+
+/**
+ * 用于启动具有looper的新线程的方便类。然后可以使用looper来创建handler类。
+ * 请注意，仍然必须调用start()方法。
+ */
 public class HandlerThread extends Thread {
     int mPriority;
     int mTid = -1;
@@ -49,6 +54,10 @@ public class HandlerThread extends Thread {
      * Call back method that can be explicitly overridden if needed to execute some
      * setup before Looper loops.
      */
+
+    /**
+     * 如果需要在Looper循环之前执行某些设置，则回调可以显式覆盖的方法。
+     */
     protected void onLooperPrepared() {
     }
 
@@ -70,6 +79,12 @@ public class HandlerThread extends Thread {
      * This method returns the Looper associated with this thread. If this thread not been started
      * or for any reason isAlive() returns false, this method will return null. If this thread
      * has been started, this method will block until the looper has been initialized.  
+     * @return The looper.
+     */
+
+    /**
+     * 此方法返回与此线程关联的Looper。如果此线程未启动或由于任何原因isAlive()返回false，则此方法将返回null。 
+	 * 如果此线程已启动，则此方法将阻塞，直到已经初始化了循环器。 
      * @return The looper.
      */
     public Looper getLooper() {
