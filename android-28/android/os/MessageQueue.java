@@ -30,6 +30,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
 /**
+ * 两个重要方法：
+ * enqueueMessage(Message msg, long when)：向消息队列中插入消息
+ * next()：从消息队列中取出消息
+ * 
+ * 问题：
+ * 1.Handler.sendMessageDelayed()怎么实现延迟的？
+ * 2.Looper.loop是一个死循环，拿不到需要处理的Message就会阻塞，那在UI线程中为什么不会导致ANR？
+ */
+
+/**
  * Low-level class holding the list of messages to be dispatched by a
  * {@link Looper}.  Messages are not added directly to a MessageQueue,
  * but rather through {@link Handler} objects associated with the Looper.
@@ -313,6 +323,10 @@ public final class MessageQueue {
         // which is not supported.
         final long ptr = mPtr;
         if (ptr == 0) {
+			// 从注释可以看出，只有looper被放弃的时候（调用了quit方法）才返回null，
+			// mPtr是MessageQueue的一个long型成员变量，关联的是一个在C++层的MessageQueue，
+			// 阻塞操作就是通过底层的这个MessageQueue来操作的；当队列被放弃的时候其变为0。
+
             return null;
         }
 
@@ -323,6 +337,10 @@ public final class MessageQueue {
                 Binder.flushPendingCommands();
             }
 
+			//阻塞方法，主要是通过native层的epoll监听文件描述符的写入事件来实现的。
+            //如果nextPollTimeoutMillis=-1，一直阻塞不会超时。
+            //如果nextPollTimeoutMillis=0，不会阻塞，立即返回。
+            //如果nextPollTimeoutMillis>0，最长阻塞nextPollTimeoutMillis毫秒(超时)，如果期间有程序唤醒会立即返回。
             nativePollOnce(ptr, nextPollTimeoutMillis);
 
             synchronized (this) {
@@ -534,15 +552,15 @@ public final class MessageQueue {
     }
 
     boolean enqueueMessage(Message msg, long when) {
-        if (msg.target == null) {
+        if (msg.target == null) {// msg.target就是发送此消息的Handler
             throw new IllegalArgumentException("Message must have a target.");
         }
-        if (msg.isInUse()) {
+        if (msg.isInUse()) {// 表示此消息正在被使用
             throw new IllegalStateException(msg + " This message is already in use.");
         }
 
         synchronized (this) {
-            if (mQuitting) {
+            if (mQuitting) {// 表示此消息队列已经被放弃了
                 IllegalStateException e = new IllegalStateException(
                         msg.target + " sending message to a Handler on a dead thread");
                 Log.w(TAG, e.getMessage(), e);
@@ -551,15 +569,24 @@ public final class MessageQueue {
             }
 
             msg.markInUse();
-            msg.when = when;
-            Message p = mMessages;
+            msg.when = when;// 将延迟时间封装到msg内部
+            Message p = mMessages;// 消息队列的第一个元素
             boolean needWake;
             if (p == null || when == 0 || when < p.when) {
+				// 如果此队列中头部元素是null(空的队列，一般是第一次)，
+				// 或者此消息不是延时的消息，则此消息需要被立即处理，此时会将这个消息作为新的头部元素，
+				// 并将此消息的next指向旧的头部元素
+				// 然后判断如果Looper获取消息的线程如果是阻塞状态则唤醒它，让它立刻去拿消息处理。
+
                 // New head, wake up the event queue if blocked.
                 msg.next = p;
                 mMessages = msg;
                 needWake = mBlocked;
             } else {
+				// 如果此消息是延时的消息，则将其添加到队列中，原理就是链表的添加新元素，按照when，
+				// 也就是延迟的时间来插入的，延迟的时间越长，越靠后，这样就得到一条有序的延时消息链表，
+				// 取出消息的时候，延迟时间越小的，就被先获取了。插入延时消息不需要唤醒Looper线程。
+
                 // Inserted within the middle of the queue.  Usually we don't have to wake
                 // up the event queue unless there is a barrier at the head of the queue
                 // and the message is the earliest asynchronous message in the queue.
@@ -580,7 +607,7 @@ public final class MessageQueue {
             }
 
             // We can assume mPtr != 0 because mQuitting is false.
-            if (needWake) {
+            if (needWake) {// 唤醒线程
                 nativeWake(mPtr);
             }
         }
