@@ -601,11 +601,11 @@ public class Handler {
      */
 
     /**
-	 * �ڵ�ǰʱ��֮ǰ�����д�������Ϣ֮�󣬽���Ϣ���͵���Ϣ���е�ĩβ�� 
-	 * �����ᱻ������handler���߳��е�{@link #handleMessage}���ա�
+	 * 在当前时间之前的所有待处理消息之后将消息推送到消息队列的末尾。 
+	 * 该消息将会被附着于handler的线程handleMessage()方法接收。
      *  
-     * @return ����ɹ��ؽ���Ϣ������Ϣ���У��򷵻�true��
-	 *         ʧ��ʱ����false��ͨ������Ϊ������Ϣ���е�looper�����˳���
+     * @return 如果消息已成功放入消息队列，则返回true。 
+	 *         失败时返回false，通常是因为处理消息队列的looper正在退出。
      */
     public final boolean sendMessage(Message msg)
     {
@@ -669,11 +669,11 @@ public class Handler {
      */
 
     /**
-     * �ڣ���ǰʱ��+ delayMillis��֮ǰ�������д�������Ϣ֮����Ϣ������Ϣ���С� 
-	 * �㽫���ڸ����ڴ�handler���߳��е�handleMessage()�����н��յ�����
+     * 在之前的所有待处理消息（当前时间+ delayMillis）之后将消息排入消息队列。 
+	 * 您将在附加到此handler的线程中的{@link #handleMessage}中收到它。
      *  
-     * @return �����Ϣ�ѳɹ�������Ϣ���У��򷵻�true��ʧ��ʱ����false��ͨ������Ϊ������Ϣ���е�looper�����˳��� 
-	 *         ��ע�⣬���Ϊtrue������ζ����Ϣ�ᱻ����--���looper�ڷ�����Ϣ�Ĵ���ʱ��֮ǰ�˳�������Ϣ����������
+     * @return 如果消息已成功放入消息队列，则返回true。失败时返回false，通常是因为处理消息队列的looper正在退出。
+	 *         请注意，结果为true并不意味着消息会被处理--如果在消息的传递时间之前退出looper，则消息将被丢弃。
      */
     public final boolean sendMessageDelayed(Message msg, long delayMillis)
     {

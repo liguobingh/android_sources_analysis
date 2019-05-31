@@ -19,8 +19,8 @@
 // To change this file, either edit the include, or device/tools/gluemaker/main.cpp, 
 // or one of the auxilary file specifications in device/tools/gluemaker.
 
-// ´ËÎÄ¼şÊÇÓÉ C++ includeÎÄ¼ş£ºSkXfermode.hÉú³É¹ıÀ´µÄ£¬¶Ô¸ÃÎÄ¼şËù×öµÄÈÎºÎ¸ü¸Ä¶¼½«±»¹¹½¨³ÌĞò¶ªÆú¡£
-// Òª¸ü¸Ä´ËÎÄ¼ş£¬Çë±à¼­includeÎÄ¼ş£¬»òÕß±à¼­device/tools/gluemaker/main.cppÎÄ¼ş£¬»òÕß±à¼­device/tools/gluemakerÖĞµÄ¸¨ÖúÎÄ¼ş¹æ·¶Ö®Ò»¡£
+// æ­¤æ–‡ä»¶æ˜¯ç”± C++ includeæ–‡ä»¶ï¼šSkXfermode.hç”Ÿæˆè¿‡æ¥çš„ï¼Œå¯¹è¯¥æ–‡ä»¶æ‰€åšçš„ä»»ä½•æ›´æ”¹éƒ½å°†è¢«æ„å»ºç¨‹åºä¸¢å¼ƒã€‚
+// è¦æ›´æ”¹æ­¤æ–‡ä»¶ï¼Œè¯·ç¼–è¾‘includeæ–‡ä»¶ï¼Œæˆ–è€…ç¼–è¾‘device/tools/gluemaker/main.cppæ–‡ä»¶ï¼Œæˆ–è€…ç¼–è¾‘device/tools/gluemakerä¸­çš„è¾…åŠ©æ–‡ä»¶è§„èŒƒä¹‹ä¸€ã€‚
 
 package android.graphics;
 
@@ -31,8 +31,8 @@ package android.graphics;
  * specified in the Modes enum. When an Xfermode is assigned to an Paint, then
  * objects drawn with that paint have the xfermode applied.
 
- * XfermodeÊÇObjectµÄ»ùÀà£¬ObjectÀà±»µ÷ÓÃÀ´ÊµÏÖÔÚ»æÍ¼¹ÜµÀÖĞµÄ×Ô¶¨Òå¡°´«ÊäÄ£Ê½¡±¡£
- * XfermodeÊÇ±»µ÷ÓÃÒÔÔÚ»æÍ¼¹ÜµÀÖĞÊµÏÖ×Ô¶¨Òå¡°´«ÊäÄ£Ê½¡±µÄ¶ÔÏóµÄ»ùÀà¡£
+ * Xfermodeæ˜¯Objectçš„åŸºç±»ï¼ŒObjectç±»è¢«è°ƒç”¨æ¥å®ç°åœ¨ç»˜å›¾ç®¡é“ä¸­çš„è‡ªå®šä¹‰â€œä¼ è¾“æ¨¡å¼â€ã€‚
+ * Xfermodeæ˜¯è¢«è°ƒç”¨ä»¥åœ¨ç»˜å›¾ç®¡é“ä¸­å®ç°è‡ªå®šä¹‰â€œä¼ è¾“æ¨¡å¼â€çš„å¯¹è±¡çš„åŸºç±»ã€‚
  * The static function Create(Modes) can be called to return an instance of any of the predefined subclasses as specified in the Modes enum. 
  * When an Xfermode is assigned to an Paint, then objects drawn with that paint have the xfermode applied.
  */

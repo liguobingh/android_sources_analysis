@@ -24,9 +24,9 @@ package android.animation;
  * next keyframe. Each keyframe also holds an optional {@link TimeInterpolator}
  * object, which defines the time interpolation over the intervalue preceding the keyframe.
 
- * ´ËÀà°üº¬¶¯»­µÄÊ±¼ä/Öµ¶Ô¡£{@link ValueAnimator}µ÷ÓÃKeyframeÀàÀ´¶¨Òå¶¯»­Ä¿±êÔÚ¶¯»­¹ı³ÌÖĞ½«¾ßÓĞµÄÖµ¡£
- * Ëæ×ÅÊ±¼ä´ÓÒ»¸ö¹Ø¼üÖ¡Ç°½øµ½ÁíÒ»¸ö¹Ø¼üÖ¡£¬Ä¿±ê¶ÔÏóµÄÖµ½«ÔÚÇ°Ò»¸ö¹Ø¼üÖ¡µÄÖµºÍÏÂÒ»¸ö¹Ø¼üÖ¡µÄÖµÖ®¼ä½øĞĞ¶¯»­´¦Àí¡£
- * Ã¿¸ö¹Ø¼üÖ¡»¹°üº¬Ò»¸ö¿ÉÑ¡µÄ{@link TimeInterpolator}¶ÔÏó£¬¸Ã¶ÔÏó¶¨Òå¹Ø¼üÖ¡Ö®Ç°µÄ¼ä¸ôÄÚµÄÊ±¼ä²åÖµ¡£
+ * æ­¤ç±»åŒ…å«åŠ¨ç”»çš„æ—¶é—´/å€¼å¯¹ã€‚{@link ValueAnimator}è°ƒç”¨Keyframeç±»æ¥å®šä¹‰åŠ¨ç”»ç›®æ ‡åœ¨åŠ¨ç”»è¿‡ç¨‹ä¸­å°†å…·æœ‰çš„å€¼ã€‚
+ * éšç€æ—¶é—´ä»ä¸€ä¸ªå…³é”®å¸§å‰è¿›åˆ°å¦ä¸€ä¸ªå…³é”®å¸§ï¼Œç›®æ ‡å¯¹è±¡çš„å€¼å°†åœ¨å‰ä¸€ä¸ªå…³é”®å¸§çš„å€¼å’Œä¸‹ä¸€ä¸ªå…³é”®å¸§çš„å€¼ä¹‹é—´è¿›è¡ŒåŠ¨ç”»å¤„ç†ã€‚
+ * æ¯ä¸ªå…³é”®å¸§è¿˜åŒ…å«ä¸€ä¸ªå¯é€‰çš„{@link TimeInterpolator}å¯¹è±¡ï¼Œè¯¥å¯¹è±¡å®šä¹‰å…³é”®å¸§ä¹‹å‰çš„é—´éš”å†…çš„æ—¶é—´æ’å€¼ã€‚
 
  * <p>The Keyframe class itself is abstract. The type-specific factory methods will return
  * a subclass of Keyframe specific to the type of value being stored. This is done to improve
@@ -37,11 +37,11 @@ package android.animation;
  * of {@link TypeEvaluator}), you should stick to using float and int as animations using those
  * types have lower runtime overhead than other types.</p>
   
- * KeyframeÀà±¾ÉíÊÇ³éÏóµÄ¡£ÌØ¶¨ÓÚÀàĞÍµÄ¹¤³§·½·¨½«·µ»ØKeyframeµÄ×ÓÀà£¬¸Ã×ÓÀàÌØ¶¨ÓÚÒª´æ´¢µÄÖµµÄÀàĞÍ¡£
- * ÕâÑù×öÊÇÎªÁËÔÚ´¦Àí×î³£¼ûµÄÇé¿öÊ±Ìá¸ßĞÔÄÜ£¨ÀıÈç£¬<code> float </ code>ºÍ<code> int </ code>Öµ£©¡£
- * ÆäËûÀàĞÍ½«ÊôÓÚ¸üÍ¨ÓÃµÄKeyframeÀà£¬½«ÆäÖµÊÓÎª¶ÔÏó¡£³ı·ÇÄúµÄ¶¯»­ĞèÒª´¦ÀíĞèÒªÖ±½ÓÉèÖÃ¶¯»­µÄ×Ô¶¨ÒåÀàĞÍ»ò
- * Êı¾İ½á¹¹£¨²¢Ê¹ÓÃ{@link TypeEvaluator}µÄÊµÏÖ½øĞĞÆÀ¹À£©£¬·ñÔòÄúÓ¦¸Ã¼á³ÖÊ¹ÓÃfloatºÍint×÷Îª¶¯»­Ê¹ÓÃÕâĞ©Àà
- * ĞÍ¾ßÓĞ½ÏµÍµÄÔËĞĞÊ±¿ªÏú±ÈÆäËûÀàĞÍ¡£
+ * Keyframeç±»æœ¬èº«æ˜¯æŠ½è±¡çš„ã€‚ç‰¹å®šäºç±»å‹çš„å·¥å‚æ–¹æ³•å°†è¿”å›Keyframeçš„å­ç±»ï¼Œè¯¥å­ç±»ç‰¹å®šäºè¦å­˜å‚¨çš„å€¼çš„ç±»å‹ã€‚
+ * è¿™æ ·åšæ˜¯ä¸ºäº†åœ¨å¤„ç†æœ€å¸¸è§çš„æƒ…å†µæ—¶æé«˜æ€§èƒ½ï¼ˆä¾‹å¦‚ï¼Œ<code> float </ code>å’Œ<code> int </ code>å€¼ï¼‰ã€‚
+ * å…¶ä»–ç±»å‹å°†å±äºæ›´é€šç”¨çš„Keyframeç±»ï¼Œå°†å…¶å€¼è§†ä¸ºå¯¹è±¡ã€‚é™¤éæ‚¨çš„åŠ¨ç”»éœ€è¦å¤„ç†éœ€è¦ç›´æ¥è®¾ç½®åŠ¨ç”»çš„è‡ªå®šä¹‰ç±»å‹æˆ–
+ * æ•°æ®ç»“æ„ï¼ˆå¹¶ä½¿ç”¨{@link TypeEvaluator}çš„å®ç°è¿›è¡Œè¯„ä¼°ï¼‰ï¼Œå¦åˆ™æ‚¨åº”è¯¥åšæŒä½¿ç”¨floatå’Œintä½œä¸ºåŠ¨ç”»ä½¿ç”¨è¿™äº›ç±»
+ * å‹å…·æœ‰è¾ƒä½çš„è¿è¡Œæ—¶å¼€é”€æ¯”å…¶ä»–ç±»å‹ã€‚
 
  */
 public abstract class Keyframe implements Cloneable {

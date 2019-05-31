@@ -60,7 +60,7 @@ public class TextViewBindingAdapter {
     public static final int DECIMAL = 0x05;
 
 
-	// ²¼¾Ö½çÃæÖĞ¿Ø¼şµÄtextÊôĞÔÉèÖÃ
+	// å¸ƒå±€ç•Œé¢ä¸­æ§ä»¶çš„textå±æ€§è®¾ç½®
     @BindingAdapter("android:text")
     public static void setText(TextView view, CharSequence text) {
         final CharSequence oldText = view.getText();

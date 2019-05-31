@@ -1258,11 +1258,11 @@ public class Paint {
      */
 
     /**
-     * ÉèÖÃ»òÇå³ımaskfilter¶ÔÏó¡£
+     * è®¾ç½®æˆ–æ¸…é™¤maskfilterå¯¹è±¡ã€‚
      * <p />
-     * ´«µİnullÒÔÇå³ıÈÎºÎÒÔÇ°µÄÑÚÂë¹ıÂËÆ÷¡£ÎªÁË·½±ãÆğ¼û£¬»¹·µ»Ø´«µİµÄ²ÎÊı¡£
+     * ä¼ é€’nullä»¥æ¸…é™¤ä»»ä½•ä»¥å‰çš„æ©ç è¿‡æ»¤å™¨ã€‚ä¸ºäº†æ–¹ä¾¿èµ·è§ï¼Œè¿˜è¿”å›ä¼ é€’çš„å‚æ•°ã€‚
      *
-     * @param maskfilter ¿ÉÄÜÎªnull¡£ÒªÔÚpaintÖĞÊ¹ÓÃµÄmaskfilter
+     * @param maskfilter å¯èƒ½ä¸ºnullã€‚è¦åœ¨paintä¸­ä½¿ç”¨çš„maskfilter
      * @return           maskfilter
      */
     public MaskFilter setMaskFilter(MaskFilter maskfilter) {
