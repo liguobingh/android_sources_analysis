@@ -30,13 +30,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
 /**
+ * 消息的入列和出列是一个生产者-消费者模式。Loop.loop()在一个线程中调用next()不断取出消息，
+ * 另一个线程则通过enqueueMessage()向队列中插入消息。这两个方法中使用了synchronized (this)同步机制，
+ * 其中this为MessageQueue对象，不管在哪个线程，这个对象都是同一个，因为Handler中的mQueue
+ * 指向的是Looper中的mQueue，防止多个线程对同一个队列的同时操作。
+ * 
  * 两个重要方法：
- * enqueueMessage(Message msg, long when)：向消息队列中插入消息
- * next()：从消息队列中取出消息
+ * enqueueMessage(Message msg, long when)：向消息队列中插入消息。
+ * next()：从消息队列中取出消息。
  * 
  * 问题：
- * 1.Handler.sendMessageDelayed()怎么实现延迟的？
- * 2.Looper.loop是一个死循环，拿不到需要处理的Message就会阻塞，那在UI线程中为什么不会导致ANR？
+ * 1.MessageQueue内部实现并不是队列而是一个单链表，原因？
+ * 2.Handler.sendMessageDelayed()怎么实现延迟的？
+ * 3.Looper.loop是一个死循环，拿不到需要处理的Message就会阻塞，那在UI线程中为什么不会导致ANR？
  */
 
 /**
@@ -52,19 +58,21 @@ public final class MessageQueue {
     private static final boolean DEBUG = false;
 
     // True if the message queue can be quit.
-    private final boolean mQuitAllowed;
+	// 如果该messageQueue允许被退出，则为true。
+    private final boolean mQuitAllowed;// 含义：是否允许MessageQueue退出
 
     @SuppressWarnings("unused")
     private long mPtr; // used by native code
+	// 含义：可以理解成是C/C++的指针，是一个内存地址，当为0的时候说明消息队列被释放了
 
-    Message mMessages;
+    Message mMessages;// 含义：表示消息链表的头Head
     private final ArrayList<IdleHandler> mIdleHandlers = new ArrayList<IdleHandler>();
     private SparseArray<FileDescriptorRecord> mFileDescriptorRecords;
     private IdleHandler[] mPendingIdleHandlers;
-    private boolean mQuitting;
+    private boolean mQuitting;// 含义：表示当前队列是否处于正在退出的状态
 
     // Indicates whether next() is blocked waiting in pollOnce() with a non-zero timeout.
-    private boolean mBlocked;
+    private boolean mBlocked;// 含义：表示是否被阻塞
 
     // The next barrier token.
     // Barriers are indicated by messages with a null target whose arg1 field carries the token.
@@ -77,6 +85,10 @@ public final class MessageQueue {
     private native static boolean nativeIsPolling(long ptr);
     private native static void nativeSetFileDescriptorEvents(long ptr, int fd, int events);
 
+	/**
+	 * 创建MessageQueue对象需要制定MessageQueue是否可以退出。
+	 * nativeInit()是一个Jni方法用来初始化mPtr。
+	 */
     MessageQueue(boolean quitAllowed) {
         mQuitAllowed = quitAllowed;
         mPtr = nativeInit();
@@ -322,6 +334,7 @@ public final class MessageQueue {
         // This can happen if the application tries to restart a looper after quit
         // which is not supported.
         final long ptr = mPtr;
+		// mPtr == 0，说明消息队列被释放了
         if (ptr == 0) {
 			// 从注释可以看出，只有looper被放弃的时候（调用了quit方法）才返回null，
 			// mPtr是MessageQueue的一个long型成员变量，关联的是一个在C++层的MessageQueue，
@@ -341,13 +354,16 @@ public final class MessageQueue {
             //如果nextPollTimeoutMillis=-1，一直阻塞不会超时。
             //如果nextPollTimeoutMillis=0，不会阻塞，立即返回。
             //如果nextPollTimeoutMillis>0，最长阻塞nextPollTimeoutMillis毫秒(超时)，如果期间有程序唤醒会立即返回。
-            nativePollOnce(ptr, nextPollTimeoutMillis);
+            
+			// 阻塞操作，等待nextPollTimeoutMillis时长
+			nativePollOnce(ptr, nextPollTimeoutMillis);
 
             synchronized (this) {
                 // Try to retrieve the next message.  Return if found.
                 final long now = SystemClock.uptimeMillis();
                 Message prevMsg = null;
                 Message msg = mMessages;
+				// 查询队列中的异步消息
                 if (msg != null && msg.target == null) {
                     // Stalled by a barrier.  Find the next asynchronous message in the queue.
                     do {
@@ -358,6 +374,7 @@ public final class MessageQueue {
                 if (msg != null) {
                     if (now < msg.when) {
                         // Next message is not ready.  Set a timeout to wake up when it is ready.
+						// 设置下一次查询消息需要等待的时长
                         nextPollTimeoutMillis = (int) Math.min(msg.when - now, Integer.MAX_VALUE);
                     } else {
                         // Got a message.
@@ -370,7 +387,7 @@ public final class MessageQueue {
                         msg.next = null;
                         if (DEBUG) Log.v(TAG, "Returning message: " + msg);
                         msg.markInUse();
-                        return msg;
+                        return msg;// 返回需要执行的信息
                     }
                 } else {
                     // No more messages.
@@ -378,6 +395,7 @@ public final class MessageQueue {
                 }
 
                 // Process the quit message now that all pending messages have been handled.
+				// 如果消息队列正在处于退出状态则返回null，调用dispose()，释放该消息队列
                 if (mQuitting) {
                     dispose();
                     return null;
@@ -560,7 +578,8 @@ public final class MessageQueue {
         }
 
         synchronized (this) {
-            if (mQuitting) {// 表示此消息队列已经被放弃了
+			// 如果此消息队列正处于退出状态，对外抛出一个异常，拒绝消息进入队列并把消息回收。
+            if (mQuitting) {
                 IllegalStateException e = new IllegalStateException(
                         msg.target + " sending message to a Handler on a dead thread");
                 Log.w(TAG, e.getMessage(), e);
@@ -572,6 +591,12 @@ public final class MessageQueue {
             msg.when = when;// 将延迟时间封装到msg内部
             Message p = mMessages;// 消息队列的第一个元素
             boolean needWake;
+			/**
+			 * 将新消息放在链表头部的条件：
+			 * 1.队列为空；
+			 * 2.接收到的新消息需要立即处理：when = 0；
+			 * 3.新消息等待处理的时间比链表队头要短。
+			 */
             if (p == null || when == 0 || when < p.when) {
 				// 如果此队列中头部元素是null(空的队列，一般是第一次)，
 				// 或者此消息不是延时的消息，则此消息需要被立即处理，此时会将这个消息作为新的头部元素，
@@ -590,7 +615,12 @@ public final class MessageQueue {
                 // Inserted within the middle of the queue.  Usually we don't have to wake
                 // up the event queue unless there is a barrier at the head of the queue
                 // and the message is the earliest asynchronous message in the queue.
+				// 源码的注释已经说明下面代码的作用：将消息插入到队列的中间。
                 needWake = mBlocked && p.target == null && msg.isAsynchronous();
+				/**
+				 * 遍历处理 新消息 的位置：prev指向p的上一个消息，p开始向队尾移动，
+				 * 如果新消息需要执行的等待时间小于p所指向的消息，就将新消息放在prev和p之间。
+				 */
                 Message prev;
                 for (;;) {
                     prev = p;
@@ -607,6 +637,7 @@ public final class MessageQueue {
             }
 
             // We can assume mPtr != 0 because mQuitting is false.
+			// 如果需要唤醒队列，调用nativeWake(mPtr)
             if (needWake) {// 唤醒线程
                 nativeWake(mPtr);
             }
